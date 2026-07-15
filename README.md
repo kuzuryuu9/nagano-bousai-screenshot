@@ -22,6 +22,7 @@ jobs:
         run: |
           npm init -y
           npm install playwright
+          npx playwright install --with-deps chromium   # ← これが重要！
 
       - name: Take Screenshot
         run: node .github/workflows/take-screenshot.js
