@@ -1,16 +1,17 @@
 name: Nagano Bousai Screenshot
+
 on:
   schedule:
     - cron: '0 * * * *'
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   screenshot:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,28 +24,8 @@ jobs:
           npm install playwright
 
       - name: Take Screenshot
-        run: node -e '
-          
-          const { chromium } = require("playwright");
-          
-          (async () => {
-            const browser = await chromium.launch({headless:true});
-            const page = await browser.newPage();
-            await page.setViewportSize({width:1280,height:800});
-            
-            await page.goto("https//www.nagano-bousai.jp/", {
-              waitUntil: "networkidle",
-              timeout: 60000
-            });
+        run: node .github/workflows/take-screenshot.js
 
-            const date = new Date().toISOString().slice(0, 16).rep
-            const filename =  'nagano-bousai-${date}.png';
-
-            await page.screenshot({　path: filename, fullPage: true}
-            await browser.close();
-            })();
-      ,
-      
       - name: Upload Screenshot
         uses: actions/upload-artifact@v4
         with:
